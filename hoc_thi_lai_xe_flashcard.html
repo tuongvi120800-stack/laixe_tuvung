@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>學駕考詞彙 · Từ vựng thi lái xe Trung Quốc</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600;700&family=Zhi+Mang+Xing&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2ead9;
+    --paper-dark:#e6dcc4;
+    --ink:#242220;
+    --ink-soft:#5a5450;
+    --seal-red:#a3312a;
+    --plate-blue:#1c4d8c;
+    --plate-blue-dark:#123a68;
+    --hwy-green:#0e6b45;
+    --hwy-green-dark:#0a4f34;
+    --warn-yellow:#d8a63d;
+    --line:#c9bd9e;
+    --shadow: 0 10px 30px rgba(30,25,15,0.25);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 15% 10%, rgba(255,255,255,0.35), transparent 40%),
+      radial-gradient(ellipse at 85% 90%, rgba(0,0,0,0.06), transparent 45%),
+      var(--paper);
+    font-family:'Noto Serif', serif;
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:24px 14px 60px;
+  }
+  .texture{
+    position:fixed; inset:0; pointer-events:none; z-index:0;
+    opacity:0.5;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(120,105,70,0.025) 0px, rgba(120,105,70,0.025) 1px, transparent 1px, transparent 3px);
+  }
+  header{
+    position:relative; z-index:1;
+    text-align:center;
+    margin-bottom:18px;
+    max-width:640px;
+  }
+  header h1{
+    font-family:'Ma Shan Zheng', cursive;
+    font-size:44px;
+    margin:0 0 2px;
+    color:var(--ink);
+    letter-spacing:2px;
+  }
+  header p.sub{
+    margin:2px 0 0;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  header .stamp-line{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin-top:8px;
+  }
+  header .stamp-line .dash{width:40px;height:1px;background:var(--line);}
+  header .stamp-line .txt{
+    font-size:11px; letter-spacing:3px; color:var(--seal-red); font-weight:600;
+    border:1px solid var(--seal-red); padding:2px 10px; border-radius:2px;
+  }
+
+  .toolbar{
+    position:relative; z-index:1;
+    width:100%; max-width:640px;
+    display:flex; flex-wrap:wrap; gap:6px;
+    justify-content:center;
+    margin-bottom:16px;
+  }
+  .plate-chip{
+    font-family:'Roboto Mono', monospace;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    color:#fff;
+    background:linear-gradient(180deg, var(--plate-blue), #143a68);
+    border:1.5px solid #fff;
+    outline:1px solid #0d2c52;
+    padding:6px 10px;
+    border-radius:3px;
+    cursor:pointer;
+    box-shadow:0 2px 5px rgba(0,0,0,0.25);
+    transition:transform .12s ease, box-shadow .12s ease;
+    user-select:none;
+  }
+  .plate-chip:hover{ transform:translateY(-1px); }
+  .plate-chip.active{
+    background:linear-gradient(180deg, var(--seal-red), #7a221c);
+  }
+  .plate-chip.all{ background:linear-gradient(180deg,#3a3530,#1c1a17); }
+
+  .progress-row{
+    position:relative; z-index:1;
+    width:100%; max-width:640px;
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+    font-family:'Roboto Mono', monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  .progress-bar{
+    flex:1; height:5px; background:var(--paper-dark);
+    border-radius:3px; overflow:hidden; border:1px solid var(--line);
+  }
+  .progress-bar > div{
+    height:100%; background:var(--hwy-green);
+    transition:width .25s ease;
+  }
+
+  .stage{
+    position:relative; z-index:1;
+    width:100%; max-width:460px;
+    perspective:1600px;
+  }
+  .card{
+    position:relative;
+    width:100%;
+    aspect-ratio: 3 / 4;
+    cursor:pointer;
+  }
+  .card-inner{
+    position:relative; width:100%; height:100%;
+    transition:transform .55s cubic-bezier(.4,.2,.2,1);
+    transform-style:preserve-3d;
+  }
+  .card.flipped .card-inner{ transform:rotateY(180deg); }
+
+  .face{
+    position:absolute; inset:0;
+    backface-visibility:hidden;
+    border-radius:10px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.08);
+  }
+  .front{
+    background:
+      radial-gradient(circle at 30% 20%, rgba(255,255,255,0.5), transparent 55%),
+      var(--paper);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:26px;
+  }
+  .front .hanzi{
+    font-family:'Ma Shan Zheng', cursive;
+    font-size:min(20vw, 108px);
+    line-height:1;
+    color:var(--ink);
+    text-shadow:1px 1px 0 rgba(0,0,0,0.05);
+  }
+  .front .hint{
+    margin-top:18px;
+    font-size:11px;
+    letter-spacing:2px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+  .stamp{
+    position:absolute; top:14px; right:14px;
+    width:52px; height:52px;
+    border:2.5px solid var(--seal-red);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--seal-red);
+    font-family:'Zhi Mang Xing', cursive;
+    font-size:15px;
+    transform:rotate(-8deg);
+    opacity:0.85;
+  }
+  .group-tag{
+    position:absolute; top:14px; left:14px;
+    font-family:'Roboto Mono', monospace;
+    font-size:9.5px; font-weight:700; letter-spacing:0.5px;
+    color:#fff;
+    background:var(--plate-blue);
+    padding:3px 7px; border-radius:3px;
+    border:1px solid #fff;
+  }
+
+  .back{
+    transform:rotateY(180deg);
+    background:#fbf6ea;
+    display:flex; flex-direction:column;
+    padding:20px 20px 0;
+  }
+  .back .pinyin{
+    font-family:'Noto Serif SC', serif;
+    font-size:19px;
+    font-weight:600;
+    color:var(--ink);
+    margin:4px 0 2px;
+  }
+  .back .hanzi-small{
+    font-size:15px;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .back .meaning{
+    font-family:'Noto Serif', serif;
+    font-size:16px;
+    font-weight:600;
+    color:var(--seal-red);
+    padding-bottom:10px;
+    border-bottom:1px dashed var(--line);
+    margin-bottom:10px;
+  }
+  .back .example-label{
+    font-size:10px; letter-spacing:2px; color:var(--ink-soft);
+    text-transform:uppercase; margin-bottom:6px;
+  }
+  .hwy-sign{
+    margin-top:auto;
+    margin-bottom:16px;
+    background:linear-gradient(180deg, var(--hwy-green), var(--hwy-green-dark));
+    border:3px solid #fff;
+    outline:2px solid var(--hwy-green-dark);
+    border-radius:6px;
+    padding:12px 14px 14px;
+    color:#fff;
+  }
+  .hwy-sign .cn{
+    font-size:15.5px; font-weight:700; line-height:1.5;
+    font-family:'Noto Serif SC', serif;
+  }
+  .hwy-sign .py{
+    font-size:11.5px; font-style:italic; opacity:0.92; margin-top:4px;
+    line-height:1.4;
+  }
+
+  .nav-row{
+    position:relative; z-index:1;
+    width:100%; max-width:460px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px;
+    margin-top:18px;
+  }
+  .nav-btn{
+    flex:1;
+    font-family:'Noto Serif SC', serif;
+    font-size:14px; font-weight:600;
+    color:#fff;
+    background:linear-gradient(180deg, #3a352e, #201d19);
+    border:none; border-radius:6px;
+    padding:12px 10px;
+    cursor:pointer;
+    box-shadow:0 3px 8px rgba(0,0,0,0.25);
+    transition:transform .1s ease;
+  }
+  .nav-btn:active{ transform:scale(0.97); }
+  .nav-btn.shuffle{ background:linear-gradient(180deg, var(--seal-red), #7a221c); flex:0 0 auto; padding:12px 16px; }
+  .nav-btn:disabled{ opacity:0.35; cursor:default; }
+
+  .flip-tip{
+    position:relative; z-index:1;
+    margin-top:12px;
+    font-size:12px; color:var(--ink-soft);
+    text-align:center;
+  }
+  footer{
+    position:relative; z-index:1;
+    margin-top:34px;
+    font-size:11px;
+    color:var(--ink-soft);
+    text-align:center;
+    max-width:460px;
+    line-height:1.6;
+  }
+  @media (max-width:400px){
+    header h1{ font-size:36px; }
+    .front .hanzi{ font-size:88px; }
+  }
+</style>
+</head>
+<body>
+<div class="texture"></div>
+
+<header>
+  <h1>學駕考詞彙</h1>
+  <p class="sub">Flashcard từ vựng thi lái xe ở Trung Quốc — 60 từ, khẩu ngữ đời sống</p>
+  <div class="stamp-line"><span class="dash"></span><span class="txt">驾考 · 词汇卡</span><span class="dash"></span></div>
+</header>
+
+<div class="toolbar" id="groupToolbar"></div>
+
+<div class="progress-row">
+  <span id="progressLabel">1 / 60</span>
+  <div class="progress-bar"><div id="progressFill" style="width:0%"></div></div>
+  <span id="groupLabel">全部</span>
+</div>
+
+<div class="stage">
+  <div class="card" id="card">
+    <div class="card-inner">
+      <div class="face front">
+        <div class="group-tag" id="tagFront">粤A</div>
+        <div class="stamp" id="stampNum">01</div>
+        <div class="hanzi" id="hanziFront">驾</div>
+        <div class="hint">點擊翻卡 · chạm để xem</div>
+      </div>
+      <div class="face back">
+        <div class="pinyin" id="pinyinBack">jiàshǐzhèng</div>
+        <div class="hanzi-small" id="hanziBack">驾驶证</div>
+        <div class="meaning" id="meaningBack">Giấy phép lái xe chính thức</div>
+        <div class="example-label">例句 · Ví dụ</div>
+        <div class="hwy-sign">
+          <div class="cn" id="exampleCn"></div>
+          <div class="py" id="examplePy"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="nav-row">
+  <button class="nav-btn" id="prevBtn">← 上一個 Trước</button>
+  <button class="nav-btn shuffle" id="shuffleBtn">洗牌 🔀</button>
+  <button class="nav-btn" id="nextBtn">下一個 Sau →</button>
+</div>
+
+<p class="flip-tip">Mẹo: nhìn chữ Hán mặt trước, tự đoán pinyin + nghĩa trước khi chạm lật thẻ 🀄</p>
+
+<footer>
+  Tài liệu từ vựng dựa trên nội dung bài học 学习考驾照 (科目一～四). Ví dụ câu được viết theo ngữ cảnh khẩu ngữ thi lái xe thực tế ở Trung Quốc.
+</footer>
+
+<script>
+const DATA = [
+{g:1,gn:"证件手续",h:"驾驶证",p:"jiàshǐzhèng",m:"Giấy phép lái xe chính thức",ex:"警察检查时，我把驾驶证递给了他。",exp:"Jǐngchá jiǎnchá shí, wǒ bǎ jiàshǐzhèng dì gěi le tā."},
+{g:1,gn:"证件手续",h:"驾照",p:"jiàzhào",m:"Bằng lái xe (cách gọi thông thường)",ex:"没有驾照不能上路开车。",exp:"Méiyǒu jiàzhào bùnéng shànglù kāichē."},
+{g:1,gn:"证件手续",h:"报名",p:"bàomíng",m:"Đăng ký học / thi",ex:"我昨天去驾校报名了，下周开始上课。",exp:"Wǒ zuótiān qù jiàxiào bàomíng le, xiàzhōu kāishǐ shàngkè."},
+{g:1,gn:"证件手续",h:"身份证",p:"shēnfènzhèng",m:"Chứng minh nhân dân / CCCD",ex:"报名时忘带身份证，只能下次再来。",exp:"Bàomíng shí wàng dài shēnfènzhèng, zhǐ néng xiàcì zài lái."},
+{g:1,gn:"证件手续",h:"体检",p:"tǐjiǎn",m:"Khám sức khỏe",ex:"体检发现视力不够，需要戴眼镜才能考驾照。",exp:"Tǐjiǎn fāxiàn shìlì bùgòu, xūyào dài yǎnjìng cáinéng kǎo jiàzhào."},
+{g:1,gn:"证件手续",h:"预约",p:"yùyuē",m:"Đặt lịch / hẹn trước",ex:"科目三的考试名额很紧张，要提前两周预约。",exp:"Kēmù sān de kǎoshì míng'é hěn jǐnzhāng, yào tíqián liǎng zhōu yùyuē."},
+{g:1,gn:"证件手续",h:"科目一/二/三/四",p:"kēmù yī/èr/sān/sì",m:"Khoa mục 1/2/3/4 (các môn thi)",ex:"科目一考了89分，差一分没过，要重考。",exp:"Kēmù yī kǎo le bāshíjiǔ fēn, chà yī fēn méi guò, yào chóng kǎo."},
+{g:1,gn:"证件手续",h:"成绩单",p:"chéngjìdān",m:"Bảng điểm / kết quả thi",ex:"考完后成绩单发到手机上，我通过了！",exp:"Kǎo wán hòu chéngjìdān fā dào shǒujī shàng, wǒ tōngguò le!"},
+{g:1,gn:"证件手续",h:"补考",p:"bǔkǎo",m:"Thi lại",ex:"科目二没过，申请了下个月的补考。",exp:"Kēmù èr méi guò, shēnqǐng le xià gè yuè de bǔkǎo."},
+{g:1,gn:"证件手续",h:"学时",p:"xuéshí",m:"Giờ học / số tiết học",ex:"学时不够的话，系统会提示你不能预约考试。",exp:"Xuéshí bùgòu dehuà, xìtǒng huì tíshì nǐ bùnéng yùyuē kǎoshì."},
+
+{g:2,gn:"车辆部件",h:"方向盘",p:"fāngxiàngpán",m:"Vô lăng",ex:"新手握方向盘容易太紧，手会发抖。",exp:"Xīnshǒu wò fāngxiàngpán róngyì tài jǐn, shǒu huì fādǒu."},
+{g:2,gn:"车辆部件",h:"油门",p:"yóumén",m:"Bàn đạp ga / chân ga",ex:"起步时油门踩太猛，车子猛地向前冲。",exp:"Qǐbù shí yóumén cǎi tài měng, chēzi měng de xiàng qián chōng."},
+{g:2,gn:"车辆部件",h:"刹车",p:"shāchē",m:"Phanh / thắng xe",ex:"前面突然出现一只狗，我赶紧踩刹车。",exp:"Qiánmiàn tūrán chūxiàn yī zhī gǒu, wǒ gǎnjǐn cǎi shāchē."},
+{g:2,gn:"车辆部件",h:"离合器",p:"líhéqì",m:"Bàn đạp côn (ly hợp)",ex:"换挡的时候忘了踩离合器，车子熄火了。",exp:"Huàndǎng de shíhou wàng le cǎi líhéqì, chēzi xīhuǒ le."},
+{g:2,gn:"车辆部件",h:"档位",p:"dǎngwèi",m:"Số xe / cần số",ex:"上坡时要换低档位，不然发动机会很吃力。",exp:"Shàngpō shí yào huàn dī dǎngwèi, bùrán fādòngjī huì hěn chīlì."},
+{g:2,gn:"车辆部件",h:"后视镜",p:"hòushìjìng",m:"Gương chiếu hậu",ex:"变道前一定要先看后视镜，确认没有车。",exp:"Biàndào qián yīdìng yào xiān kàn hòushìjìng, quèrèn méiyǒu chē."},
+{g:2,gn:"车辆部件",h:"转向灯",p:"zhuǎnxiàngdēng",m:"Đèn xi nhan",ex:"转弯没打转向灯，被后面的车鸣笛。",exp:"Zhuǎnwān méi dǎ zhuǎnxiàngdēng, bèi hòumiàn de chē míngdí."},
+{g:2,gn:"车辆部件",h:"雨刮器",p:"yǔguāqì",m:"Cần gạt nước mưa",ex:"下大雨时雨刮器开到最快还是看不清。",exp:"Xià dàyǔ shí yǔguāqì kāi dào zuì kuài háishì kàn bù qīng."},
+{g:2,gn:"车辆部件",h:"手刹",p:"shǒushā",m:"Phanh tay",ex:"停在坡道上忘记拉手刹，车子往后溜了。",exp:"Tíng zài pōdào shàng wàngjì lā shǒushā, chēzi wǎng hòu liū le."},
+{g:2,gn:"车辆部件",h:"仪表盘",p:"yíbiǎopán",m:"Bảng đồng hồ",ex:"仪表盘上的油灯亮了，要赶快去加油。",exp:"Yíbiǎopán shàng de yóudēng liàng le, yào gǎnkuài qù jiāyóu."},
+
+{g:3,gn:"驾驶动作",h:"起步",p:"qǐbù",m:"Khởi hành / xuất phát",ex:"起步时要先看左右，确认安全再走。",exp:"Qǐbù shí yào xiān kàn zuǒyòu, quèrèn ānquán zài zǒu."},
+{g:3,gn:"驾驶动作",h:"倒车",p:"dàochē",m:"Lùi xe",ex:"倒车入库是科目二最难的一个项目。",exp:"Dàochē rùkù shì kēmù èr zuì nán de yī gè xiàngmù."},
+{g:3,gn:"驾驶动作",h:"变道",p:"biàndào",m:"Chuyển làn đường",ex:"高速上频繁变道很危险，容易引发事故。",exp:"Gāosù shàng pínfán biàndào hěn wēixiǎn, róngyì yǐnfā shìgù."},
+{g:3,gn:"驾驶动作",h:"超车",p:"chāochē",m:"Vượt xe",ex:"想超车时要先确认对向没有来车。",exp:"Xiǎng chāochē shí yào xiān quèrèn duìxiàng méiyǒu láichē."},
+{g:3,gn:"驾驶动作",h:"停车",p:"tíngchē",m:"Đỗ xe / đậu xe",ex:"这里不能停车，再往前找一下停车场。",exp:"Zhèlǐ bùnéng tíngchē, zài wǎng qián zhǎo yīxià tíngchēchǎng."},
+{g:3,gn:"驾驶动作",h:"掉头",p:"diàotóu",m:"Quay đầu xe",ex:"走错路了，找个路口掉头回去吧。",exp:"Zǒu cuò lù le, zhǎo gè lùkǒu diàotóu huíqù ba."},
+{g:3,gn:"驾驶动作",h:"转弯",p:"zhuǎnwān",m:"Rẽ / quẹo",ex:"转弯时速度太快，差点撞上路边的护栏。",exp:"Zhuǎnwān shí sùdù tài kuài, chàdiǎn zhuàng shàng lùbiān de hùlán."},
+{g:3,gn:"驾驶动作",h:"靠边停车",p:"kàobiān tíngchē",m:"Dừng xe sát lề đường",ex:"前面有警察在执勤，示意让我靠边停车。",exp:"Qiánmiàn yǒu jǐngchá zài zhíqín, shìyì ràng wǒ kàobiān tíngchē."},
+{g:3,gn:"驾驶动作",h:"减速",p:"jiǎnsù",m:"Giảm tốc độ",ex:"进入市区要减速，限速是每小时40公里。",exp:"Jìnrù shìqū yào jiǎnsù, xiànsù shì měi xiǎoshí sìshí gōnglǐ."},
+{g:3,gn:"驾驶动作",h:"加速",p:"jiāsù",m:"Tăng tốc độ",ex:"合并车道后我加速跟上了前面的车流。",exp:"Hébìng chēdào hòu wǒ jiāsù gēn shàng le qiánmiàn de chēliú."},
+
+{g:4,gn:"交通法规",h:"限速",p:"xiànsù",m:"Giới hạn tốc độ",ex:"这段路限速80，我开到了100，被拍了。",exp:"Zhè duàn lù xiànsù bāshí, wǒ kāi dào le yìbǎi, bèi pāi le."},
+{g:4,gn:"交通法规",h:"超速",p:"chāosù",m:"Vượt quá tốc độ cho phép",ex:"超速百分之二十以上要扣6分并罚款。",exp:"Chāosù bǎifēnzhī èrshí yǐshàng yào kòu liù fēn bìng fákuǎn."},
+{g:4,gn:"交通法规",h:"违章",p:"wéizhāng",m:"Vi phạm quy tắc giao thông",ex:"他这个月违章三次，分都快扣完了。",exp:"Tā zhège yuè wéizhāng sān cì, fēn dōu kuài kòu wán le."},
+{g:4,gn:"交通法规",h:"扣分",p:"kòufēn",m:"Trừ điểm bằng lái",ex:"不系安全带扣1分，闯红灯扣6分。",exp:"Bù jì ānquándài kòu yī fēn, chuǎng hóngdēng kòu liù fēn."},
+{g:4,gn:"交通法规",h:"罚款",p:"fákuǎn",m:"Phạt tiền",ex:"违规停车被贴了一张200元的罚款单。",exp:"Wéiguī tíngchē bèi tiē le yī zhāng èrbǎi yuán de fákuǎndān."},
+{g:4,gn:"交通法规",h:"醉驾",p:"zuìjià",m:"Lái xe trong tình trạng say rượu",ex:"昨晚聚餐喝了酒，打车回家，没有醉驾。",exp:"Zuówǎn jùcān hē le jiǔ, dǎchē huíjiā, méiyǒu zuìjià."},
+{g:4,gn:"交通法规",h:"闯红灯",p:"chuǎng hóngdēng",m:"Vượt đèn đỏ",ex:"闯红灯不只是扣分罚款，还可能撞到人。",exp:"Chuǎng hóngdēng bùzhǐ shì kòufēn fákuǎn, hái kěnéng zhuàng dào rén."},
+{g:4,gn:"交通法规",h:"年审",p:"niánshěn",m:"Kiểm định xe hàng năm",ex:"车子买了三年了，今年要第一次做年审。",exp:"Chēzi mǎi le sān nián le, jīnnián yào dì yī cì zuò niánshěn."},
+{g:4,gn:"交通法规",h:"优先权",p:"yōuxiānquán",m:"Quyền ưu tiên đi trước",ex:"救护车和消防车在任何情况下都有优先权。",exp:"Jiùhùchē hé xiāofángchē zài rènhé qíngkuàng xià dōu yǒu yōuxiānquán."},
+{g:4,gn:"交通法规",h:"保险",p:"bǎoxiǎn",m:"Bảo hiểm xe",ex:"买车第一件事就是去办保险，不然不能上路。",exp:"Mǎichē dì yī jiàn shì jiùshì qù bàn bǎoxiǎn, bùrán bùnéng shànglù."},
+
+{g:5,gn:"交通标志",h:"禁止通行",p:"jìnzhǐ tōngxíng",m:"Cấm đi lại / cấm qua",ex:"前方禁止通行，我们得绕道走了。",exp:"Qiánfāng jìnzhǐ tōngxíng, wǒmen děi ràodào zǒu le."},
+{g:5,gn:"交通标志",h:"单行道",p:"dānxíngdào",m:"Đường một chiều",ex:"这是单行道，千万不能逆向行驶。",exp:"Zhè shì dānxíngdào, qiānwàn bùnéng nìxiàng xíngshǐ."},
+{g:5,gn:"交通标志",h:"让行",p:"ràngxíng",m:"Nhường đường",ex:"看到救护车要主动让行，别抢道。",exp:"Kàndào jiùhùchē yào zhǔdòng ràngxíng, bié qiǎngdào."},
+{g:5,gn:"交通标志",h:"禁止停车",p:"jìnzhǐ tíngchē",m:"Cấm đỗ xe",ex:"校门口禁止停车，警察会来贴罚单。",exp:"Xiàomén kǒu jìnzhǐ tíngchē, jǐngchá huì lái tiē fádān."},
+{g:5,gn:"交通标志",h:"人行横道",p:"rénxíng héngdào",m:"Vạch sang đường / vạch kẻ ngựa vằn",ex:"车开到人行横道前一定要减速礼让。",exp:"Chē kāi dào rénxíng héngdào qián yīdìng yào jiǎnsù lǐràng."},
+{g:5,gn:"交通标志",h:"限高",p:"xiàngāo",m:"Giới hạn chiều cao",ex:"前面桥洞限高2米，卡车过不去。",exp:"Qiánmiàn qiáodòng xiàngāo liǎng mǐ, kǎchē guò bú qù."},
+{g:5,gn:"交通标志",h:"注意儿童",p:"zhùyì értóng",m:"Chú ý trẻ em",ex:"学校附近有注意儿童的标志，要慢行。",exp:"Xuéxiào fùjìn yǒu zhùyì értóng de biāozhì, yào mànxíng."},
+{g:5,gn:"交通标志",h:"施工路段",p:"shīgōng lùduàn",m:"Đoạn đường đang thi công",ex:"前方施工路段，请提前减速并道。",exp:"Qiánfāng shīgōng lùduàn, qǐng tíqián jiǎnsù bìngdào."},
+{g:5,gn:"交通标志",h:"急弯路",p:"jí wān lù",m:"Đoạn đường cua gấp",ex:"山路上有急弯路，晚上开车要特别小心。",exp:"Shānlù shàng yǒu jí wān lù, wǎnshàng kāichē yào tèbié xiǎoxīn."},
+{g:5,gn:"交通标志",h:"高速公路",p:"gāosù gōnglù",m:"Đường cao tốc",ex:"上高速公路前要检查油量和胎压。",exp:"Shàng gāosù gōnglù qián yào jiǎnchá yóuliàng hé tāiyā."},
+
+{g:6,gn:"紧急情况",h:"事故",p:"shìgù",m:"Tai nạn giao thông",ex:"那个路口经常发生事故，开车要小心。",exp:"Nàge lùkǒu jīngcháng fāshēng shìgù, kāichē yào xiǎoxīn."},
+{g:6,gn:"紧急情况",h:"报警",p:"bàojǐng",m:"Gọi cảnh sát / báo án",ex:"发生碰撞后要先报警，再联系保险公司。",exp:"Fāshēng pèngzhuàng hòu yào xiān bàojǐng, zài liánxì bǎoxiǎn gōngsī."},
+{g:6,gn:"紧急情况",h:"救护车",p:"jiùhùchē",m:"Xe cứu thương",ex:"听到救护车鸣笛，所有车都要靠边让行。",exp:"Tīngdào jiùhùchē míngdí, suǒyǒu chē dōu yào kàobiān ràngxíng."},
+{g:6,gn:"紧急情况",h:"爆胎",p:"bàotāi",m:"Nổ lốp xe",ex:"高速上突然爆胎，千万不能急打方向盘。",exp:"Gāosù shàng tūrán bàotāi, qiānwàn bùnéng jí dǎ fāngxiàngpán."},
+{g:6,gn:"紧急情况",h:"抛锚",p:"pāomáo",m:"Xe hỏng giữa đường / chết máy",ex:"车子在路上抛锚了，只能打电话叫拖车。",exp:"Chēzi zài lùshàng pāomáo le, zhǐnéng dǎ diànhuà jiào tuōchē."},
+{g:6,gn:"紧急情况",h:"警示三角牌",p:"jǐngshì sānjiǎopái",m:"Tam giác cảnh báo khẩn cấp",ex:"车抛锚后要在后方摆放警示三角牌。",exp:"Chē pāomáo hòu yào zài hòufāng bǎifàng jǐngshì sānjiǎopái."},
+{g:6,gn:"紧急情况",h:"灭火器",p:"mièhuǒqì",m:"Bình chữa cháy",ex:"车上最好常备一个小型灭火器。",exp:"Chē shàng zuìhǎo chángbèi yī gè xiǎoxíng mièhuǒqì."},
+{g:6,gn:"紧急情况",h:"碰撞",p:"pèngzhuàng",m:"Va chạm / đụng xe",ex:"因为跟车太近，发生了追尾碰撞。",exp:"Yīnwèi gēnchē tài jìn, fāshēng le zhuīwěi pèngzhuàng."},
+{g:6,gn:"紧急情况",h:"拖车",p:"tuōchē",m:"Xe kéo / gọi xe cứu hộ",ex:"车坏在高速上，我打电话叫了拖车。",exp:"Chē huài zài gāosù shàng, wǒ dǎ diànhuà jiào le tuōchē."},
+{g:6,gn:"紧急情况",h:"理赔",p:"lǐpéi",m:"Yêu cầu bồi thường bảo hiểm",ex:"出了事故后，我去保险公司办理理赔。",exp:"Chū le shìgù hòu, wǒ qù bǎoxiǎn gōngsī bànlǐ lǐpéi."},
+];
+
+const GROUP_NAMES = {
+  0:"全部 · Tất cả",
+  1:"证件手续 · Giấy tờ",
+  2:"车辆部件 · Bộ phận xe",
+  3:"驾驶动作 · Động tác lái",
+  4:"交通法规 · Luật GT",
+  5:"交通标志 · Biển báo",
+  6:"紧急情况 · Khẩn cấp",
+};
+
+let currentGroup = 0;
+let pool = DATA.slice();
+let idx = 0;
+
+function buildToolbar(){
+  const bar = document.getElementById('groupToolbar');
+  bar.innerHTML = '';
+  Object.keys(GROUP_NAMES).forEach(k=>{
+    const key = parseInt(k,10);
+    const chip = document.createElement('div');
+    chip.className = 'plate-chip' + (key===0 ? ' all':'') + (key===currentGroup ? ' active':'');
+    chip.textContent = GROUP_NAMES[key];
+    chip.onclick = ()=>{ currentGroup = key; setGroup(key); buildToolbar(); };
+    bar.appendChild(chip);
+  });
+}
+
+function setGroup(g){
+  pool = (g===0) ? DATA.slice() : DATA.filter(d=>d.g===g);
+  idx = 0;
+  render();
+}
+
+function render(){
+  const card = document.getElementById('card');
+  card.classList.remove('flipped');
+  const d = pool[idx];
+  document.getElementById('tagFront').textContent = d.gn;
+  document.getElementById('stampNum').textContent = String(idx+1).padStart(2,'0');
+  document.getElementById('hanziFront').textContent = d.h;
+  document.getElementById('pinyinBack').textContent = d.p;
+  document.getElementById('hanziBack').textContent = d.h;
+  document.getElementById('meaningBack').textContent = d.m;
+  document.getElementById('exampleCn').textContent = d.ex;
+  document.getElementById('examplePy').textContent = d.exp;
+
+  document.getElementById('progressLabel').textContent = (idx+1) + ' / ' + pool.length;
+  document.getElementById('groupLabel').textContent = GROUP_NAMES[currentGroup].split('·')[0].trim();
+  document.getElementById('progressFill').style.width = Math.round(((idx+1)/pool.length)*100) + '%';
+
+  document.getElementById('prevBtn').disabled = idx===0;
+  document.getElementById('nextBtn').disabled = idx===pool.length-1;
+}
+
+document.getElementById('card').addEventListener('click', ()=>{
+  document.getElementById('card').classList.toggle('flipped');
+});
+document.getElementById('prevBtn').addEventListener('click', ()=>{
+  if(idx>0){ idx--; render(); }
+});
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  if(idx<pool.length-1){ idx++; render(); }
+});
+document.getElementById('shuffleBtn').addEventListener('click', ()=>{
+  for(let i=pool.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [pool[i],pool[j]] = [pool[j],pool[i]];
+  }
+  idx = 0;
+  render();
+});
+
+buildToolbar();
+setGroup(0);
+</script>
+</body>
+</html>
